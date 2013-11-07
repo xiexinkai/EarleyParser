@@ -2,6 +2,10 @@
  * author: Breanna Ammons
  * project: EarleyParser with parse trees
  * 
+ * Bug fixed by @author xxk
+ * @see ParseTree.getTree()
+ * @see EarleyParser.parseSentence()
+ * 
  * Main
  *   This the main program. It creates and runs the parser on 4 example 
  *   sentences. The test function displays all of the charts produced during 
@@ -40,7 +44,6 @@ public class Main
 		*/
 		
 		String[] sentence={"wang","fanyi","zai","fanyi","xiaoshuo"};
-		//String[] sentence={"wang","zaiV","fanyiN"};
 		Grammar grammar =new CrabGrammar();
 		EarleyParser parser = new EarleyParser(grammar);
 		test(sentence, parser);

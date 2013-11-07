@@ -3,7 +3,10 @@ package earleyparser;
 /**
  * 
  * @author xxk
- *
+ * 
+ *   The CrabGrammar is an simple grammar in Chinese. 
+ *   It is more complex than the NewGrammar.
+ *   It is a grammar using in homework 2 in course Computational Linguistics.
  */
 public class CrabGrammar extends Grammar{
 
@@ -13,7 +16,6 @@ public class CrabGrammar extends Grammar{
 		initPOS();
 	}
 	
-	// Create the Rules for this Simple Grammar
 		private void initRules()
 		{
 			// S-> NP VP

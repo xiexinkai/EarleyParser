@@ -312,21 +312,34 @@ public class ParseTree
 	 *   
 	 *   This is one of the two functions that are public and is the correct 
 	 *   to get a ParseTree.
+	 *   
+	 *   Bug:if last state in charts is not $->S @, this function cannot return any result.
+	 *   Bug fixed by @author xxk
 	**************************************************************************/
 	static public Vector<ParseTree> getTree(Grammar g, Chart[] c)
 	{
 		charts = c;
 		grammar = g;
+		
+
+		/*
+		 * bug fixed
+		 */
 		Chart lastC = charts[charts.length - 1];
-		State parse = lastC.getState(lastC.size() - 1);
 		Vector<ParseTree> trees = new Vector<ParseTree>();
-
-		String[] fin = { "S", "@" };
-		RHS finRHS = new RHS(fin);
-		State finish = new State("$", finRHS, 0, charts.length - 1, null);
-
+		int k=lastC.size();
+		State parse,finish;
+		do{
+			k--;
+			parse = lastC.getState(k);
+			String[] fin = { "S", "@" };
+			RHS finRHS = new RHS(fin);
+			finish = new State("$", finRHS, 0, charts.length - 1, null);
+		}while(k>0 && !parse.equals(finish));
+		//System.out.println(k);
+		boolean hasTree=k>0 ? true : false;
 		// If there was a successful parse, find all of the possible parse trees.
-		if ( parse.equals(finish) )
+		if ( hasTree )
 		{ 
 			Vector<State> srcs = parse.getSources();
 			for ( int i = 0; i < srcs.size(); i++ )

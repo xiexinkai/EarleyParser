@@ -9,6 +9,8 @@
  *****************************************************************************/
 package earleyparser;
 
+import java.util.Vector;
+
 public class EarleyParser
 {
 	private Grammar grammar;
@@ -34,6 +36,10 @@ public class EarleyParser
 	 * parseSentence()
 	 *   This is the main loop for parsing the sentence into the chart. It will
 	 *   return true if there is at least one successful parse of the sentence.
+	 *   
+     *   Bug:if last state in charts is not $->S @
+     *       this function will return false even if there has successful parse.
+	 *   Bug fixed by @author xxk
 	 *************************************************************************/
 	public boolean parseSentence(String[] s)
 	{
@@ -65,13 +71,20 @@ public class EarleyParser
 		}
 
 		// Determine if there was a successful parse.
-		String[] fin = { "S", "@" };
-		RHS finRHS = new RHS(fin);
-		State finish = new State("$", finRHS, 0, sentence.length, null);
-
-		State last = charts[sentence.length].getState(charts[sentence.length].size() - 1);
-
-		return finish.equals(last);
+		// bug fixed here
+		Chart lastC = charts[charts.length - 1];
+		int k=lastC.size();
+		State parse,finish;
+		do{
+			k--;
+			parse = lastC.getState(k);
+			String[] fin = { "S", "@" };
+			RHS finRHS = new RHS(fin);
+			finish = new State("$", finRHS, 0, charts.length - 1, null);
+		}while(k>0 && !parse.equals(finish));
+		//System.out.println(k);
+		boolean hasAnswer=k>0 ? true : false;
+		return hasAnswer;
 	}
 
 	/**************************************************************************
